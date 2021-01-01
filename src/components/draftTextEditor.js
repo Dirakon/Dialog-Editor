@@ -3,9 +3,10 @@ import {Editor,EditorState,getDefaultKeyBinding,RichUtils} from 'draft-js';
 import Draft from 'draft-js'
 import './RichText.css'
 //var EditorState = Draft.EditorState;
-var rem;
-var stateFromHTML = require('draft-js-import-html').stateFromHTML;
-var ContentState = Draft.ContentState;
+let rem;
+const stateFromHTML = require('draft-js-import-html').stateFromHTML;
+const ContentState = Draft.ContentState;
+
 class DraftTextEditor extends React.Component {
         constructor(props) {
           super(props);
@@ -29,11 +30,14 @@ class DraftTextEditor extends React.Component {
         // return ({editorState: EditorState.createEmpty()})
 
     componentDidMount() {
-            const bns = document.getElementsByTagName('button');
-            const dis = document.getElementsByClassName("RichEditor-editor");
+            const button = document.getElementsByTagName('button')[0];
             rem = this;
+            const el = document.querySelector('.DIVIDER');
+            el.addEventListener('mousedown',function () {
+                alert("MOUSE DOWN!!!");
+            })
            // alert(dis.length);
-            bns[0].addEventListener("click", function() {
+            button.addEventListener("click", function() {
                alert(rem.state.editorState.getCurrentContent().getPlainText('\u0001'));
             });
        // console.log('componentDidMount:', document.getElementById('app').textContent);

@@ -22,7 +22,7 @@ class MyEditor extends React.Component {
 }
 
 ReactDOM.render(
-    <React.StrictMode>
+    <React.StrictMode >
         <App />
     </React.StrictMode>,
     document.getElementById('root')

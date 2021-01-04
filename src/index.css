@@ -19,6 +19,7 @@ code {
     monospace;
 }
 button{
+    width: 100vw;
 }
 .flexer{
   height: 90%;
@@ -30,9 +31,10 @@ button{
  /* position: absolute;
   right: 0;
   top:0;*/
-background-color: #61dafb;
+background-color: #51c3ec;
   flex: 1 1 auto;
-  width:100px;
+  width:auto;
+    overflow-wrap: break-word;
 }
 .DIVIDER{
   height: 100%;

@@ -7,9 +7,11 @@
     /*
     position: relative;
     left: -50px;
-    top: -50px;*/
+    top: -50px;
     flex: 1 1 auto;
-    width:100px;
+    */
+
+    width:50vw;
     max-height: 90%;
     overflow-y: auto;
     overflow-x: hidden;

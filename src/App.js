@@ -10,10 +10,10 @@ function App() {
             <div style ={{height:'100%'}}>
                 <div className={'flexer'}>
                     <DraftTextEditor/>
-                    <div className={'DIVIDER'}>
+                    <div className={'DIVIDER'} draggable={true}>
                     </div>
                     <div className={ 'actDialog'}>
-                        dialogExample
+                        dialog Example
                     </div>
                 </div>
 

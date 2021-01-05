@@ -36,6 +36,8 @@ class DraftTextEditor extends React.Component {
         rem = this;
         const el = document.querySelector('.DIVIDER');
         const editorCore = document.querySelector('.RichEditor-root')
+        var DialogAnalyzer = require('../DialogAnalyzer');
+        const dialoger = new DialogAnalyzer();
         document.addEventListener("drag", function(event) {
           //  alert(button.text);
             //event.preventDefault();
@@ -46,7 +48,8 @@ class DraftTextEditor extends React.Component {
         }, false);
         // alert(dis.length);
         button.addEventListener("click", function () {
-            alert(rem.state.editorState.getCurrentContent().getPlainText('\u0001'));
+            dialoger.compile(rem.state.editorState.getCurrentContent().getPlainText('\u0001'))
+            alert(dialoger.getText());
         });
         // console.log('componentDidMount:', document.getElementById('app').textContent);
 

@@ -12,12 +12,14 @@ function App() {
                     <DraftTextEditor/>
                     <div className={'DIVIDER'} draggable={true}>
                     </div>
-                    <div className={ 'actDialog'}>
+                    <div className={ 'dialogSide'}>
+                        <div className={'actualDialog'}>
                         dialog Example
+                        </div>
                     </div>
                 </div>
 
-                <button> Compile!</button>
+                <button className={'compiler'}> Compile!</button>
             </div>
         </div>
 

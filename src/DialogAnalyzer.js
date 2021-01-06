@@ -45,13 +45,11 @@ class DialogAnalyzer {
         let sht = 1, minsht = 1, maxsht = 1;
         let seekingForElse = -1;
         while (sht !== 0) {
-            alert(sht);
             if (seekingForElse > -1) {
                 seekingForElse--;
             }
             let charId = 0;
             while (charId < this.code[line].length) {
-                alert(this.code[line][charId]);
                 if (this.code[line][charId] === '(') { //Visibility change
                     sht++;
                 } else if (this.code[line][charId] === ')') {   //Visibility change
@@ -76,17 +74,15 @@ class DialogAnalyzer {
                     this.options.push([newOption, line + 1])
                     break;
                 } else if (this.code[line][charId] === ':') {   //Some operation
-                    alert("op");
                     charId++;
                     let operation = this.readFromPointToDot(this.code[line], charId);
                     charId = operation[1];
                     operation = operation[0];
                     if (operation === this.EXIT) {
                         this.options=[];
-                        this.text="";
+                        this.text="--EXITED THE DIALOG--";
                         return charId;
                     } else if (operation[0] === '"') {//That's THE speech
-                        alert("THE");
                         let txt = "";
                         for (let i = 1;i < operation.length - 1;++i )
                         {
@@ -250,7 +246,7 @@ class DialogAnalyzer {
 
     chooseOption(option) {
         this.curLine = option[1];
-        this.process();
+        this.process(this.curLine);
     }
 
     readFromPointToDot(line, charId) {    //Returns [string we were looking for,new char id]
@@ -263,7 +259,7 @@ class DialogAnalyzer {
             if (quotes) {
                 if (line[charId] === '\\' && line.length - 1 !== charId && line[charId + 1] === 'n') { //New line when writing dialogs
                     charId += 2;
-                    ans += '\n';
+                    ans += '<br>';
                     continue;
                 }
             } else if (line[charId] === '.') {

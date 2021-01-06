@@ -18,7 +18,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-button{
+.compiler{
     width: 100vw;
 }
 .flexer{
@@ -27,14 +27,19 @@ button{
   flex-flow: row nowrap;
   align-items: flex-start;
 }
-.actDialog{
+.actualDialog{
+
+  background-color: #51c3ec;
+  overflow-wrap: break-word;
+}
+.dialogSide{
+  flex: 1 1 100px;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: flex-start;
  /* position: absolute;
   right: 0;
   top:0;*/
-background-color: #51c3ec;
-  flex: 1 1 auto;
-  width:auto;
-    overflow-wrap: break-word;
 }
 .DIVIDER{
   height: 100%;

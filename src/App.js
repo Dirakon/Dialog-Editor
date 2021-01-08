@@ -2,7 +2,6 @@ import React from 'react';
 import './App.css';
 import DraftTextEditor from './components/DraftTextEditor'
 
-var pj = 0
 
 function App() {
     return (
@@ -14,7 +13,7 @@ function App() {
                     </div>
                     <div className={ 'dialogSide'}>
                         <div className={'actualDialog'}>
-                        dialog Example
+                        Dialog will be visible here!
                         </div>
                     </div>
                 </div>

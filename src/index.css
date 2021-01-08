@@ -29,7 +29,6 @@ code {
 }
 .actualDialog{
 
-  background-color: #51c3ec;
   overflow-wrap: break-word;
 }
 .dialogSide{
@@ -37,9 +36,6 @@ code {
   display: flex;
   flex-flow: column nowrap;
   align-items: flex-start;
- /* position: absolute;
-  right: 0;
-  top:0;*/
 }
 .DIVIDER{
   height: 100%;

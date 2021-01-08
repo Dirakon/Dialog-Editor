@@ -18,7 +18,7 @@ class DialogAnalyzer {
         this.curLine = 0;
         this.tags = {};
         this.vars = {};
-        this.saves = [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]; // 10 saves
+        this.saves = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1]; // 10 saves
         let found = false;
         for (; this.curLine < this.code.length; ++this.curLine) {
             for (let charId = 0; charId < this.code[this.curLine].length; ++charId) {
@@ -78,138 +78,95 @@ class DialogAnalyzer {
                     let operation = this.readFromPointToDot(this.code[line], charId);
                     charId = operation[1];
                     operation = operation[0];
-                    if (operation === this.EXIT) {
-                        this.options=[];
-                        this.text="--EXITED THE DIALOG--";
+                    if (operation === this.EXIT) {  //Exit the dialog operation.
+                        this.options = [];
+                        this.text = "--EXITED THE DIALOG--";
                         return charId;
-                    } else if (operation[0] === '"') {//That's THE speech
+                    } else if (operation[0] === '"') {//That's THE text
                         let txt = "";
-                        for (let i = 1;i < operation.length - 1;++i )
-                        {
-                            txt +=operation[i];
+                        for (let i = 1; i < operation.length - 1; ++i) {
+                            txt += operation[i];
                         }
-                        this.text = txt ;
-                    } else if (operation === this.REMEMBER) {
+                        this.text = txt;
+                    } else if (operation === this.REMEMBER) {   //Load some point
                         let loadedSaveLine = this.readFromPointToDot(this.code[line], charId)[0];
                         this.process(this.saves[parseInt(loadedSaveLine)]);
-                        return charId;
-                    } else if (operation === this.DUNFORGET) {
+                        return;
+                    } else if (operation === this.DUNFORGET) {  //Save some point
                         let saveWhat = this.readFromPointToDot(this.code[line], charId);  // 0 - str, 1 - charId
                         charId = saveWhat[1];
                         saveWhat = parseInt(saveWhat[0]);
-                        let saveWhere= this.readFromPointToDot(this.code[line], charId);  // 0 - str, 1 - charId
+                        let saveWhere = this.readFromPointToDot(this.code[line], charId);  // 0 - str, 1 - charId
                         charId = saveWhere[1];
                         saveWhere = parseInt(saveWhere[0]);
                         this.saves[saveWhere] = saveWhat + 1 + line;
-                    }
-                    /*else if (com == DRUG || com == TIMA) {
-                        Character pal;
-                        if (com == DRUG) {
-                            pal = sobut;
-                        } else {
-                            int
-                            vot = int.Parse(readFromPointToDotNG(code[line], ch));
-                            ch = savech;
-                            pal = (Character.team[vot]);
+                    } else if (operation === this.VAR) {        //Working with variables
+                        let sign = this.readFromPointToDot(this.code[line], charId);
+                        charId = sign[1];
+                        sign = sign[0];
+                        let variable = ""
+                        for (let i = 1; i < sign.length - 1; ++i) {
+                            variable += sign[i];
                         }
-                        com = readFromPointToDotNG(code[line], ch);
-                        ch = savech;
-                        if (com == VAR) {
-                            string
-                            znak = readFromPointToDotNG(code[line], ch);
-                            ch = savech;
-                            string
-                            var =
-                            "";
-                            for (int i = 1;
-                            i < znak.Length - 1;
-                            ++i
-                        )
-                            {
-                                var +=
-                                znak[i];
+                        sign = this.readFromPointToDot(this.code[line], charId);
+                        charId = sign[1];
+                        sign = sign[0];
+                        let amount = this.readFromPointToDot(this.code[line], charId);
+                        charId = amount[1];
+                        amount = parseInt(amount[0]);
+                        if (sign === "=") {
+                            this.vars[variable] = amount;
+                        } else if (sign === "+=") {
+                            this.vars[variable]+=amount;
+                        } else {
+                            let pass = false;
+                            if (sign === "==") {
+                                pass = this.vars[variable] === amount;
+                            } else if (sign === ">=") {
+                                pass = this.vars[variable] >= amount;
+                            } else if (sign === "!=") {
+                                pass = this.vars[variable] !== amount;
+                            } else if (sign === "<=") {
+                                pass = this.vars[variable] <= amount;
+                            } else if (sign === "<") {
+                                pass = this.vars[variable] < amount;
+                            } else if (sign === ">") {
+                                pass = this.vars[variable] < amount;
                             }
-                            znak = readFromPointToDotNG(code[line], ch);
-                            ch = savech;
-                            int
-                            amount = int.Parse(readFromPointToDotNG(code[line], ch));
-                            ch = savech;
-                            if (znak == "=") {
-                                pal.setVar(
-                                var ,
-                                amount
-                            )
-                                ;
-                            } else if (znak == "+=") {
-                                pal.addToVar(
-                                var ,
-                                amount
-                            )
-                                ;
-                            } else {
-                                bool
-                                pass = false;
-                                if (znak == "==") {
-                                    pass = pal.getVar(
-                                    var )
-                                ==
-                                    amount;
-                                } else if (znak == ">=") {
-                                    pass = pal.getVar(
-                                    var )
-                                >=
-                                    amount;
-                                } else if (znak == "!=") {
-                                    pass = pal.getVar(
-                                    var )
-                                !=
-                                    amount;
-                                } else if (znak == "<=") {
-                                    pass = pal.getVar(
-                                    var )
-                                <=
-                                    amount;
-                                } else if (znak == "<") {
-                                    pass = pal.getVar(
-                                    var )
-                                <
-                                    amount;
-                                } else if (znak == ">") {
-                                    pass = pal.getVar(
-                                    var )
-                                >
-                                    amount;
-                                }
-                                if (pass) {
-                                    maxsht++;
-                                } else {
-                                    seekingForInache = -2;
-                                }
-                            }
-                        } else if (operation === this.ADDTAG) {
-                            pal.addTag(readFromPointToDotNG(code[line], ch));
-                            ch = savech;
-                        } else if (operation === this.DELETETAG) {
-                            pal.deleteTag(readFromPointToDotNG(code[line], ch));
-                            ch = savech;
-                        } else if (operation === this.HASTAG) {
-                            if (pal.hasTag(readFromPointToDotNG(code[line], ch))) {
+                            if (pass) {
                                 maxsht++;
                             } else {
-                                seekingForInache = -2;
+                                seekingForElse = -2;
                             }
-                            ch = savech;
                         }
-                    } */
-                    else if (operation === this.UP) {
-                        let num = this.readFromPointToDot(this.code[line], this.ch);
+                    } else if (operation === this.ADDTAG) {
+                        let tag = this.readFromPointToDot(this.code[line], charId);
+                        charId = tag[1];
+                        tag = tag[0];
+                        this.tags[tag]=true;
+                    } else if (operation === this.DELETETAG) {
+                        let tag = this.readFromPointToDot(this.code[line], charId);
+                        charId = tag[1];
+                        tag = tag[0];
+                        this.tags[tag] = false;
+                    }
+                     else if (operation === this.HASTAG) {
+                        let tag = this.readFromPointToDot(this.code[line], charId);
+                        charId = tag[1];
+                        tag = tag[0];
+                        if (!(tag in this.tags) || this.tags[tag] === false ) {
+                            seekingForElse = -2;
+                        } else {
+                            maxsht++;
+                        }
+                    } else if (operation === this.UP) {
+                        let num = this.readFromPointToDot(this.code[line], charId);
                         charId = num[1];
                         num = parseInt(num[0])
                         let discussedLine = line - 1;
-                        sht = 0;
+                        sht = -1;
                         while (sht !== num) {
-                            for (let lch = 0;lch < this.code[discussedLine].length;++lch )
-                            {
+                            for (let lch = 0; lch < this.code[discussedLine].length; ++lch) {
                                 if (this.code[discussedLine][lch] === ' ' || this.code[discussedLine][lch] === '\t' || this.code[discussedLine][lch] === '\n') {
                                     continue;
                                 }

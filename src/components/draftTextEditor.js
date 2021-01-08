@@ -249,7 +249,8 @@ const InlineStyleControls = (props) => {
         </div>
     );
 };
-const sampleDialog = `\t\\\\What you see now is an example dialog!
+const sampleDialog = `
+\t//What you see now is an example dialog!
 
 (
 

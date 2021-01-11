@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/dialogEditor/static/css/main.012263d1.chunk.css",
+    "main.js": "/dialogEditor/static/js/main.7f3864f1.chunk.js",
+    "main.js.map": "/dialogEditor/static/js/main.7f3864f1.chunk.js.map",
+    "runtime-main.js": "/dialogEditor/static/js/runtime-main.dd9771a1.js",
+    "runtime-main.js.map": "/dialogEditor/static/js/runtime-main.dd9771a1.js.map",
+    "static/css/2.7cd75462.chunk.css": "/dialogEditor/static/css/2.7cd75462.chunk.css",
+    "static/js/2.c530b01e.chunk.js": "/dialogEditor/static/js/2.c530b01e.chunk.js",
+    "static/js/2.c530b01e.chunk.js.map": "/dialogEditor/static/js/2.c530b01e.chunk.js.map",
+    "static/js/3.81e387c0.chunk.js": "/dialogEditor/static/js/3.81e387c0.chunk.js",
+    "static/js/3.81e387c0.chunk.js.map": "/dialogEditor/static/js/3.81e387c0.chunk.js.map",
+    "index.html": "/dialogEditor/index.html",
+    "static/css/2.7cd75462.chunk.css.map": "/dialogEditor/static/css/2.7cd75462.chunk.css.map",
+    "static/css/main.012263d1.chunk.css.map": "/dialogEditor/static/css/main.012263d1.chunk.css.map",
+    "static/js/2.c530b01e.chunk.js.LICENSE.txt": "/dialogEditor/static/js/2.c530b01e.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.dd9771a1.js",
+    "static/css/2.7cd75462.chunk.css",
+    "static/js/2.c530b01e.chunk.js",
+    "static/css/main.012263d1.chunk.css",
+    "static/js/main.7f3864f1.chunk.js"
+  ]
+}

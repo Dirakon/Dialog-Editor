@@ -5,7 +5,7 @@ import 'draft-js/dist/Draft.css';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-
+import BrowserRouter from 'react-router-dom/BrowserRouter'
 class MyEditor extends React.Component {
     constructor(props) {
         super(props);
@@ -22,9 +22,9 @@ class MyEditor extends React.Component {
 }
 
 ReactDOM.render(
-    <React.StrictMode >
+    <BrowserRouter basename={process.env.PUBLIC_URL} >
         <App />
-    </React.StrictMode>,
+    </BrowserRouter>,
     document.getElementById('root')
 );
 //ReactDOM.render(<React.StrictMode><MyEditor /></React.StrictMode>, document.getElementById('root'));

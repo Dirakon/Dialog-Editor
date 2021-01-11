@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import DraftTextEditor from './components/DraftTextEditor'
+import DraftTextEditor from './components/draftTextEditor'
 
 
 function App() {

@@ -1,6 +1,7 @@
 import React from 'react';
 import {Editor, EditorState, getDefaultKeyBinding, RichUtils} from 'draft-js';
 import './RichText.css'
+import DialogAnalyzer from '../DialogAnalyzer'
 let rem;
 const stateFromHTML = require('draft-js-import-html').stateFromHTML;
 
@@ -29,7 +30,7 @@ class DraftTextEditor extends React.Component {
         const button = document.querySelector('.compiler');
         rem = this;
         const editorCore = document.querySelector('.RichEditor-root')
-        var DialogAnalyzer = require('../DialogAnalyzer');
+        //var DialogAnalyzer = require('../DialogAnalyzer').DialogAnalyzer;
         const dialoger = new DialogAnalyzer();
         document.addEventListener("drag", function(event) {
             if (event.clientX !== 0) {
@@ -190,16 +191,6 @@ class StyleButton extends React.Component {
 }
 
 const BLOCK_TYPES = [
-    {label: 'H1', style: 'header-one'},
-    {label: 'H2', style: 'header-two'},
-    {label: 'H3', style: 'header-three'},
-    {label: 'H4', style: 'header-four'},
-    {label: 'H5', style: 'header-five'},
-    {label: 'H6', style: 'header-six'},
-    {label: 'Blockquote', style: 'blockquote'},
-    {label: 'UL', style: 'unordered-list-item'},
-    {label: 'OL', style: 'ordered-list-item'},
-    {label: 'Code Block', style: 'code-block'},
 ];
 
 const BlockStyleControls = (props) => {
@@ -226,10 +217,6 @@ const BlockStyleControls = (props) => {
 };
 
 var INLINE_STYLES = [
-    {label: 'Bold', style: 'BOLD'},
-    {label: 'Italic', style: 'ITALIC'},
-    {label: 'Underline', style: 'UNDERLINE'},
-    {label: 'Monospace', style: 'CODE'},
 ];
 
 const InlineStyleControls = (props) => {
@@ -263,7 +250,7 @@ const sampleDialog = `
 \t\t\t:load.0
 \t\t)
 \t)
-\t\\"Where am I?"/
+\t\\"Who am I?"/
 \t(
 \t\t:"I already said that you, mister actor, are an actor. Why would you want to know more?"
 \t\t\\"..."/

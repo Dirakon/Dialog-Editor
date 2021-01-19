@@ -231,4 +231,4 @@ class DialogAnalyzer {
 
 }
 
-module.exports = DialogAnalyzer
+export default DialogAnalyzer;

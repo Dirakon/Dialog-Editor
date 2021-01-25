@@ -1,9 +1,10 @@
-import React from 'react';
+import React,{useEffect}from 'react';
 import {Editor, EditorState, getDefaultKeyBinding, RichUtils} from 'draft-js';
 import './RichText.css'
 import DialogAnalyzer from '../DialogAnalyzer'
 let rem;
 const stateFromHTML = require('draft-js-import-html').stateFromHTML;
+
 
 class DraftTextEditor extends React.Component {
     constructor(props) {

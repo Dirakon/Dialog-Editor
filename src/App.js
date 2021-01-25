@@ -1,9 +1,12 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import './App.css';
-import DraftTextEditor from './components/draftTextEditor'
+import DraftTextEditor from './components/DraftTextEditor'
 
 
 function App() {
+    useEffect(() => {
+        document.title = "Dialog Editor"
+    }, []);
     return (
         <div className="App" style={{height : '100%'}}>
             <div style ={{height:'100%'}}>

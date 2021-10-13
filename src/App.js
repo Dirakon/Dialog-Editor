@@ -1,6 +1,5 @@
 import React, {useEffect} from 'react';
-import './App.css';
-import DraftTextEditor from './components/DraftTextEditor'
+import DraftTextEditor from './components/draftTextEditor'
 
 
 function App() {
@@ -12,7 +11,7 @@ function App() {
             <div style ={{height:'100%'}}>
                 <div className={'flexer'}>
                     <DraftTextEditor/>
-                    <div className={'DIVIDER'} draggable={true}>
+                    <div className={'DIVIDER'}>
                     </div>
                     <div className={ 'dialogSide'}>
                         <div className={'actualDialog'}>

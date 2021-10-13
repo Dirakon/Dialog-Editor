@@ -1,18 +1,17 @@
-import React,{useEffect}from 'react';
-import {Editor, EditorState, getDefaultKeyBinding, RichUtils} from 'draft-js';
+import React, { useEffect } from 'react';
+import { Editor, EditorState, getDefaultKeyBinding, RichUtils } from 'draft-js';
 import './RichText.css'
 import DialogAnalyzer from '../DialogAnalyzer'
-let rem;
 const stateFromHTML = require('draft-js-import-html').stateFromHTML;
 
 
 class DraftTextEditor extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {editorState: EditorState.createWithText(sampleDialog)};
+        this.state = { editorState: EditorState.createWithText(sampleDialog) };
 
         this.focus = () => this.refs.editor.focus();
-        this.onChange = (editorState) => this.setState({editorState});
+        this.onChange = (editorState) => this.setState({ editorState });
 
         this.handleKeyCommand = this._handleKeyCommand.bind(this);
         this.mapKeyToEditorCommand = this._mapKeyToEditorCommand.bind(this);
@@ -26,41 +25,53 @@ class DraftTextEditor extends React.Component {
             editorState: EditorState.createWithContent(contentState)
         };
     }
-
-    componentDidMount() {
-        const button = document.querySelector('.compiler');
-        rem = this;
+    setupDraggableBar() {
         const editorCore = document.querySelector('.RichEditor-root')
-        //var DialogAnalyzer = require('../DialogAnalyzer').DialogAnalyzer;
-        const dialoger = new DialogAnalyzer();
-        document.addEventListener("drag", function(event) {
-            if (event.clientX !== 0) {
-                editorCore.style.width = (event.clientX-32).toString() + 'px';
+        let movingAllowed = false;
+        const divider = document.querySelector(".DIVIDER")
+        divider.addEventListener("mousedown", function (event) {
+            movingAllowed = true;
+        }, false);
+        divider.addEventListener("mouseup", function (event) {
+            movingAllowed = false;
+        }, false);
+        document.addEventListener("mousemove", function (event) {
+            if (movingAllowed) {
+                editorCore.style.width = (event.clientX - 32).toString() + 'px';
             }
         }, false);
+    }
+    componentDidMount() {
+        this.setupDraggableBar()
+
+        const button = document.querySelector('.compiler');
+        let theDraftTextEditor = this;
+        const dialoger = new DialogAnalyzer();
         let previousOptions = [];
-        const updateIt = function(){
-            for (let i = 0; i < previousOptions.length;++i){
+        const updateIt = function () {
+            for (let i = 0; i < previousOptions.length; ++i) {
                 previousOptions[i].remove();
             }
             previousOptions = [];
             let options = dialoger.getOptions();
-            let papa =  document.getElementsByClassName("dialogSide")[0]
-            for (let i = 0; i < options.length;++i){
+            if (options === undefined)
+                return
+            let papa = document.getElementsByClassName("dialogSide")[0]
+            for (let i = 0; i < options.length; ++i) {
                 let element = document.createElement("button");
-                element.innerHTML=options[i][0];
+                element.innerHTML = options[i][0];
                 const remOption = options[i];
-                element.addEventListener("click",function () {
+                element.addEventListener("click", function () {
                     dialoger.chooseOption(remOption);
                     updateIt();
                 })
                 previousOptions.push(element);
                 papa.appendChild(element);
             }
-            document.querySelector('.actualDialog').innerHTML= dialoger.getText();
+            document.querySelector('.actualDialog').innerHTML = dialoger.getText();
         }
         button.addEventListener("click", function () {
-            dialoger.compile(rem.state.editorState.getCurrentContent().getPlainText('\u0001'))
+            dialoger.compile(theDraftTextEditor.state.editorState.getCurrentContent().getPlainText('\u0001'))
             updateIt();
         });
 
@@ -109,7 +120,7 @@ class DraftTextEditor extends React.Component {
     }
 
     render() {
-        const {editorState} = this.state;
+        const { editorState } = this.state;
 
         // If the user changes block type before entering any text, we can
         // either style the placeholder or hide it. Let's just hide it now.
@@ -185,7 +196,7 @@ class StyleButton extends React.Component {
 
         return (
             <span className={className} onMouseDown={this.onToggle}>
-              {this.props.label}
+                {this.props.label}
             </span>
         );
     }
@@ -195,7 +206,7 @@ const BLOCK_TYPES = [
 ];
 
 const BlockStyleControls = (props) => {
-    const {editorState} = props;
+    const { editorState } = props;
     const selection = editorState.getSelection();
     const blockType = editorState
         .getCurrentContent()

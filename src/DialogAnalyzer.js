@@ -13,7 +13,6 @@ class DialogAnalyzer {
     }
 
     compile(code) {
-        const el = document.querySelector('.actDialog');
         this.code = code.split('');
         this.curLine = 0;
         this.tags = {};
@@ -33,163 +32,203 @@ class DialogAnalyzer {
             }
         }
         if (!found) {
-            //Some kind of error, dunno...
+            //Did not found the first left bracket...
+            alert("You are missing the first left bracket! Code is incorrect.")
+            return
         }
         this.process(this.curLine);
+    }
+
+    executeAnOperation(operation, charId, context) {
+        let needsToExit = false;
+        switch (operation) {
+            case (this.VAR): {        //Working with variables
+                let sign = this.readFromPointToDot(this.code[context.line], charId);
+                charId = sign.charId;
+                sign = sign.str;
+                let variable = ""
+                for (let i = 1; i < sign.length - 1; ++i) {
+                    variable += sign[i];
+                }
+                sign = this.readFromPointToDot(this.code[context.line], charId);
+                charId = sign.charId;
+                sign = sign.str;
+                let amount = this.readFromPointToDot(this.code[context.line], charId);
+                charId = amount.charId;
+                amount = parseInt(amount.str);
+                if (sign === "=") {
+                    this.vars[variable] = amount;
+                } else if (sign === "+=") {
+                    this.vars[variable] += amount;
+                } else {
+                    let pass = false;
+                    if (sign === "==") {
+                        pass = this.vars[variable] === amount;
+                    } else if (sign === ">=") {
+                        pass = this.vars[variable] >= amount;
+                    } else if (sign === "!=") {
+                        pass = this.vars[variable] !== amount;
+                    } else if (sign === "<=") {
+                        pass = this.vars[variable] <= amount;
+                    } else if (sign === "<") {
+                        pass = this.vars[variable] < amount;
+                    } else if (sign === ">") {
+                        pass = this.vars[variable] < amount;
+                    }
+                    if (pass) {
+                        context.maxIndentationLevel++;
+                    } else {
+                        context.seekingForElse = -2;
+                    }
+                }
+            }
+                break;
+            case this.ADDTAG: {
+                let tag = this.readFromPointToDot(this.code[context.line], charId);
+                charId = tag.charId;
+                tag = tag.str;
+                this.tags[tag] = true;
+            }
+                break;
+            case this.DELETETAG: {
+                let tag = this.readFromPointToDot(this.code[context.line], charId);
+                charId = tag.charId;
+                tag = tag.str;
+                this.tags[tag] = false;
+            }
+                break;
+            case this.HASTAG: {
+                let tag = this.readFromPointToDot(this.code[context.line], charId);
+                charId = tag.charId;
+                tag = tag.str;
+                if (!(tag in this.tags) || this.tags[tag] === false) {
+                    context.seekingForElse = -2;
+                } else {
+                    context.maxIndentationLevel++;
+                }
+            }
+                break;
+            case this.ELSE: {
+                if (context.seekingForElse > -1) {
+                    context.seekingForElse = -1;
+                    context.maxIndentationLevel++;
+                }
+            }
+                break;
+            case this.EXIT: {//Exit the dialog operation.
+                this.options = [];
+                this.text = "--EXITED THE DIALOG--";
+                needsToExit = true
+            }
+                break;
+            case this.REMEMBER: {  //Load some point
+                let loadedSaveLine = this.readFromPointToDot(this.code[context.line], charId).str;
+                this.process(this.saves[parseInt(loadedSaveLine)]);
+                needsToExit = true
+            }
+                break;
+            case this.DUNFORGET: { //Save some point
+                let saveWhat = this.readFromPointToDot(this.code[context.line], charId);  // 0 - str, 1 - charId
+                charId = saveWhat.charId;
+                saveWhat = parseInt(saveWhat.str);
+                let saveWhere = this.readFromPointToDot(this.code[context.line], charId);  // 0 - str, 1 - charId
+                charId = saveWhere.charId;
+                saveWhere = parseInt(saveWhere.str);
+                this.saves[saveWhere] = saveWhat + 1 + context.line;
+            }
+                break;
+            case this.UP: {
+                let num = this.readFromPointToDot(this.code[context.line], charId);
+                charId = num.charId;
+                num = parseInt(num.str)
+                let discussedLine = context.line - 1;
+                context.indentationLevel = -1;
+                while (context.indentationLevel !== num) {
+                    for (let lch = 0; lch < this.code[discussedLine].length; ++lch) {
+                        if (this.code[discussedLine][lch] === ' ' || this.code[discussedLine][lch] === '\t' || this.code[discussedLine][lch] === '\n') {
+                            continue;
+                        }
+                        if (this.code[discussedLine][lch] === '(') {
+                            context.indentationLevel++;
+                        } else if (this.code[discussedLine][lch] === ')') {
+                            context.indentationLevel--;
+                        } else {
+                            break;
+                        }
+                    }
+                    discussedLine--;
+                }
+                this.process(discussedLine + 1);
+                needsToExit = true;
+            }
+                break;
+        }
+        return { needsToExit: needsToExit, charId: charId }
     }
 
     process(line) {
         this.text = "";
         this.options = [];
-        line++;
-        let sht = 1, minsht = 1, maxsht = 1;
-        let seekingForElse = -1;
-        while (sht !== 0) {
-            if (seekingForElse > -1) {
-                seekingForElse--;
+        let context = {}
+        context.line = ++line;
+        context.indentationLevel = 1
+        context.minIndentationLevel = 1
+        context.maxIndentationLevel = 1;
+        context.seekingForElse = -1;
+        while (context.indentationLevel !== 0) {
+            if (context.seekingForElse > -1) {
+                context.seekingForElse--;
             }
             let charId = 0;
-            while (charId < this.code[line].length) {
-                if (this.code[line][charId] === '(') { //Visibility change
-                    sht++;
-                } else if (this.code[line][charId] === ')') {   //Visibility change
-                    if (maxsht !== 1 && ((sht < minsht || sht > maxsht)) === false) {
-                        maxsht--;
-                    } else if (seekingForElse === -2 && (sht < minsht || sht > maxsht) === true) {
-                        seekingForElse = 2;
+            while (charId < this.code[context.line].length) {
+                if (this.code[context.line][charId] === '(') { //Visibility change
+                    context.indentationLevel++;
+                } else if (this.code[context.line][charId] === ')') {   //Visibility change
+                    if (context.maxIndentationLevel !== 1 && ((context.indentationLevel < context.minIndentationLevel || context.indentationLevel > context.maxIndentationLevel)) === false) {
+                        context.maxIndentationLevel--;
+                    } else if (context.seekingForElse === -2 && (context.indentationLevel < context.minIndentationLevel || context.indentationLevel > context.maxIndentationLevel) === true) {
+                        context.seekingForElse = 2;
                     }
-                    sht--;
-                } else if (sht < minsht || sht > maxsht) {   //Out of our visibility
+                    context.indentationLevel--;
+                } else if (context.indentationLevel < context.minIndentationLevel || context.indentationLevel > context.maxIndentationLevel) {   //Out of our visibility
                     ++charId;
                     continue;
-                } else if (this.code[line][charId] === '\\') {   //Option
+                } else if (this.code[context.line][charId] === '\\') {   //Option
                     charId++;
                     let newOption = "";
-                    for (let lch = charId; lch < this.code[line].length; ++lch) {
-                        if (this.code[line][lch] === '/') {
+                    for (let lch = charId; lch < this.code[context.line].length; ++lch) {
+                        if (this.code[context.line][lch] === '/') {
                             break;
                         }
-                        newOption += this.code[line][lch];
+                        newOption += this.code[context.line][lch];
                     }
-                    this.options.push([newOption, line + 1])
+                    this.options.push([newOption, context.line + 1])
                     break;
-                } else if (this.code[line][charId] === ':') {   //Some operation
+                } else if (this.code[context.line][charId] === ':') {   //Some operation
                     charId++;
-                    let operation = this.readFromPointToDot(this.code[line], charId);
-                    charId = operation[1];
-                    operation = operation[0];
-                    if (operation === this.EXIT) {  //Exit the dialog operation.
-                        this.options = [];
-                        this.text = "--EXITED THE DIALOG--";
-                        return charId;
-                    } else if (operation[0] === '"') {//That's THE text
+                    let operation = this.readFromPointToDot(this.code[context.line], charId);
+                    charId = operation.charId;
+                    console.log(operation)
+                    operation = operation.str;
+                    if (operation[0] === '"') {//That's THE text
                         let txt = "";
                         for (let i = 1; i < operation.length - 1; ++i) {
                             txt += operation[i];
                         }
                         this.text = txt;
-                    } else if (operation === this.REMEMBER) {   //Load some point
-                        let loadedSaveLine = this.readFromPointToDot(this.code[line], charId)[0];
-                        this.process(this.saves[parseInt(loadedSaveLine)]);
-                        return;
-                    } else if (operation === this.DUNFORGET) {  //Save some point
-                        let saveWhat = this.readFromPointToDot(this.code[line], charId);  // 0 - str, 1 - charId
-                        charId = saveWhat[1];
-                        saveWhat = parseInt(saveWhat[0]);
-                        let saveWhere = this.readFromPointToDot(this.code[line], charId);  // 0 - str, 1 - charId
-                        charId = saveWhere[1];
-                        saveWhere = parseInt(saveWhere[0]);
-                        this.saves[saveWhere] = saveWhat + 1 + line;
-                    } else if (operation === this.VAR) {        //Working with variables
-                        let sign = this.readFromPointToDot(this.code[line], charId);
-                        charId = sign[1];
-                        sign = sign[0];
-                        let variable = ""
-                        for (let i = 1; i < sign.length - 1; ++i) {
-                            variable += sign[i];
-                        }
-                        sign = this.readFromPointToDot(this.code[line], charId);
-                        charId = sign[1];
-                        sign = sign[0];
-                        let amount = this.readFromPointToDot(this.code[line], charId);
-                        charId = amount[1];
-                        amount = parseInt(amount[0]);
-                        if (sign === "=") {
-                            this.vars[variable] = amount;
-                        } else if (sign === "+=") {
-                            this.vars[variable]+=amount;
-                        } else {
-                            let pass = false;
-                            if (sign === "==") {
-                                pass = this.vars[variable] === amount;
-                            } else if (sign === ">=") {
-                                pass = this.vars[variable] >= amount;
-                            } else if (sign === "!=") {
-                                pass = this.vars[variable] !== amount;
-                            } else if (sign === "<=") {
-                                pass = this.vars[variable] <= amount;
-                            } else if (sign === "<") {
-                                pass = this.vars[variable] < amount;
-                            } else if (sign === ">") {
-                                pass = this.vars[variable] < amount;
-                            }
-                            if (pass) {
-                                maxsht++;
-                            } else {
-                                seekingForElse = -2;
-                            }
-                        }
-                    } else if (operation === this.ADDTAG) {
-                        let tag = this.readFromPointToDot(this.code[line], charId);
-                        charId = tag[1];
-                        tag = tag[0];
-                        this.tags[tag]=true;
-                    } else if (operation === this.DELETETAG) {
-                        let tag = this.readFromPointToDot(this.code[line], charId);
-                        charId = tag[1];
-                        tag = tag[0];
-                        this.tags[tag] = false;
                     }
-                     else if (operation === this.HASTAG) {
-                        let tag = this.readFromPointToDot(this.code[line], charId);
-                        charId = tag[1];
-                        tag = tag[0];
-                        if (!(tag in this.tags) || this.tags[tag] === false ) {
-                            seekingForElse = -2;
-                        } else {
-                            maxsht++;
+                    else {
+                        let opResult = this.executeAnOperation(operation, charId, context)
+                        if (opResult.needsToExit == true) {
+                            return opResult.charId;
                         }
-                    } else if (operation === this.UP) {
-                        let num = this.readFromPointToDot(this.code[line], charId);
-                        charId = num[1];
-                        num = parseInt(num[0])
-                        let discussedLine = line - 1;
-                        sht = -1;
-                        while (sht !== num) {
-                            for (let lch = 0; lch < this.code[discussedLine].length; ++lch) {
-                                if (this.code[discussedLine][lch] === ' ' || this.code[discussedLine][lch] === '\t' || this.code[discussedLine][lch] === '\n') {
-                                    continue;
-                                }
-                                if (this.code[discussedLine][lch] === '(') {
-                                    sht++;
-                                } else if (this.code[discussedLine][lch] === ')') {
-                                    sht--;
-                                } else {
-                                    break;
-                                }
-                            }
-                            discussedLine--;
-                        }
-                        return this.process(discussedLine + 1);
-                    } else if (operation === this.ELSE && seekingForElse > -1) {
-                        seekingForElse = -1;
-                        maxsht++;
+                        charId = opResult.charId;
                     }
                     break;
                 }
                 ++charId;
             }
-            ++line;
+            ++context.line;
         }
     }
 
@@ -206,7 +245,7 @@ class DialogAnalyzer {
         this.process(this.curLine);
     }
 
-    readFromPointToDot(line, charId) {    //Returns [string we were looking for,new char id]
+    readFromPointToDot(line, charId) {    //Returns {str:string we were looking for, charId: new char id}
         let ans = "";
         let quotes = false;
         while (charId < line.length) {
@@ -220,12 +259,12 @@ class DialogAnalyzer {
                     continue;
                 }
             } else if (line[charId] === '.') {
-                return [ans, charId + 1];
+                return { str: ans, charId: charId + 1 };
             }
             ans += line[charId];
             ++charId;
         }
-        return [ans, charId + 1];
+        return { str: ans, charId: charId + 1 }
     }
 
 

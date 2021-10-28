@@ -1,25 +1,23 @@
 {
   "files": {
-    "main.css": "/dialogEditor/static/css/main.6a6d1fd3.chunk.css",
-    "main.js": "/dialogEditor/static/js/main.6184330c.chunk.js",
-    "main.js.map": "/dialogEditor/static/js/main.6184330c.chunk.js.map",
-    "runtime-main.js": "/dialogEditor/static/js/runtime-main.a8295b62.js",
-    "runtime-main.js.map": "/dialogEditor/static/js/runtime-main.a8295b62.js.map",
+    "main.css": "/dialogEditor/static/css/main.2c390da8.chunk.css",
+    "main.js": "/dialogEditor/static/js/main.e7f6cf93.chunk.js",
+    "main.js.map": "/dialogEditor/static/js/main.e7f6cf93.chunk.js.map",
+    "runtime-main.js": "/dialogEditor/static/js/runtime-main.b44c1e5b.js",
+    "runtime-main.js.map": "/dialogEditor/static/js/runtime-main.b44c1e5b.js.map",
     "static/css/2.e426f036.chunk.css": "/dialogEditor/static/css/2.e426f036.chunk.css",
-    "static/js/2.6d1028fd.chunk.js": "/dialogEditor/static/js/2.6d1028fd.chunk.js",
-    "static/js/2.6d1028fd.chunk.js.map": "/dialogEditor/static/js/2.6d1028fd.chunk.js.map",
-    "static/js/3.669d71cd.chunk.js": "/dialogEditor/static/js/3.669d71cd.chunk.js",
-    "static/js/3.669d71cd.chunk.js.map": "/dialogEditor/static/js/3.669d71cd.chunk.js.map",
+    "static/js/2.4617cac9.chunk.js": "/dialogEditor/static/js/2.4617cac9.chunk.js",
+    "static/js/2.4617cac9.chunk.js.map": "/dialogEditor/static/js/2.4617cac9.chunk.js.map",
     "index.html": "/dialogEditor/index.html",
     "static/css/2.e426f036.chunk.css.map": "/dialogEditor/static/css/2.e426f036.chunk.css.map",
-    "static/css/main.6a6d1fd3.chunk.css.map": "/dialogEditor/static/css/main.6a6d1fd3.chunk.css.map",
-    "static/js/2.6d1028fd.chunk.js.LICENSE.txt": "/dialogEditor/static/js/2.6d1028fd.chunk.js.LICENSE.txt"
+    "static/css/main.2c390da8.chunk.css.map": "/dialogEditor/static/css/main.2c390da8.chunk.css.map",
+    "static/js/2.4617cac9.chunk.js.LICENSE.txt": "/dialogEditor/static/js/2.4617cac9.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.a8295b62.js",
+    "static/js/runtime-main.b44c1e5b.js",
     "static/css/2.e426f036.chunk.css",
-    "static/js/2.6d1028fd.chunk.js",
-    "static/css/main.6a6d1fd3.chunk.css",
-    "static/js/main.6184330c.chunk.js"
+    "static/js/2.4617cac9.chunk.js",
+    "static/css/main.2c390da8.chunk.css",
+    "static/js/main.e7f6cf93.chunk.js"
   ]
 }

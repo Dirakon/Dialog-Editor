@@ -18,7 +18,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-.compiler{
+.compileButton{
     width: 100vw;
 }
 .flexer{
@@ -37,7 +37,7 @@ code {
   flex-flow: column nowrap;
   align-items: flex-start;
 }
-.DIVIDER{
+.dividerBar{
   height: 100%;
   width: 10px;
   background-color: #282c34;

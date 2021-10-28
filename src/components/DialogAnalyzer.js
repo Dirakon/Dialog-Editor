@@ -1,3 +1,5 @@
+import { useCallback } from "react";
+
 class DialogAnalyzer {
     constructor(props) {
         // OPERATIONS:
@@ -73,7 +75,7 @@ class DialogAnalyzer {
                     } else if (sign === "<") {
                         pass = this.vars[variable] < amount;
                     } else if (sign === ">") {
-                        pass = this.vars[variable] < amount;
+                        pass = this.vars[variable] > amount;
                     }
                     if (pass) {
                         context.maxIndentationLevel++;
@@ -208,7 +210,6 @@ class DialogAnalyzer {
                     charId++;
                     let operation = this.readFromPointToDot(this.code[context.line], charId);
                     charId = operation.charId;
-                    console.log(operation)
                     operation = operation.str;
                     if (operation[0] === '"') {//That's THE text
                         let txt = "";

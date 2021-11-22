@@ -6,18 +6,18 @@ class IndentationMaster {
     }
     analyzeLineAndRemoveIndentationCharacters(line) {
         line = line.trim()
-        if (line.startsWith('(') || line.startsWith(')')) {
+        if (line.startsWith('(')) {
             let amountOfOpeningBrackets = characterCountInString('(', line)
-            let amountOfClosingBrackets = characterCountInString(')', line)
             this.context.indentationLevel += amountOfOpeningBrackets
-            this.context.indentationLevel -= amountOfClosingBrackets
-            while (this.context.maxIndentationLevel > 1 && amountOfClosingBrackets != 0) {
-                this.context.maxIndentationLevel--;
-                amountOfClosingBrackets--;
-            }
-            line = replaceAllInString(replaceAllInString(line,'(', ''),')', '')
         }
-        return line
+        else if (line.startsWith(')')) {
+            let amountOfClosingBrackets = characterCountInString(')', line)
+            this.context.indentationLevel -= amountOfClosingBrackets
+            this.context.maxIndentationLevel = Math.min(this.context.maxIndentationLevel,this.context.indentationLevel)
+        } else {
+            return line
+        }
+        return replaceAllInString(replaceAllInString(line, '(', ''), ')', '')
     }
     canWeWorkInCurrentLine() {
         return this.context.indentationLevelIsInReach()

@@ -1,18 +1,6 @@
 
 export const SYMBOL_NOT_FOUND_FLAG = -1;
 
-export function readFromPointToDot(line, charId) {    //Returns {str:string we were looking for, charId: new char id}
-    let lineWithoutUserStrings = replaceUserStringsWithSafeCharacters(line)
-    let noStringLineFromThePoint = lineWithoutUserStrings.substr(charId)
-    let indexOfDotInNewLine = noStringLineFromThePoint.indexOf('.')
-    let desiredString;
-    if (indexOfDotInNewLine == SYMBOL_NOT_FOUND_FLAG) {
-        desiredString = line.substring(charId)
-    } else {
-        desiredString = line.substring(charId, charId+indexOfDotInNewLine)
-    }
-    return { str: desiredString, charId: charId + desiredString.length }
-}
 export function replaceAllInString(string,elementOld,elementNew){
     return string.split(elementOld).join(elementNew);
 }

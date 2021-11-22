@@ -8,7 +8,7 @@ class DraftTextEditor extends React.Component {
         super(props);
         this.state = { editorState: EditorState.createWithText(props.defaultDialog) };
 
-        props.setEditorState(this.state.editorState)
+        props.setChild(this)
 
         props.onProhibitSelectionStateChanged.Subscribe(() => { document.querySelector(".public-DraftEditor-content").classList.toggle("prohibitSelection") })
         props.onDividerMoved.Subscribe((px) => {
@@ -35,7 +35,6 @@ class DraftTextEditor extends React.Component {
     }
 
     _mapKeyToEditorCommand(e) {
-        console.log(e.keyCode)
         if (e.keyCode === 9 /* TAB */) {
             const newEditorState = RichUtils.onTab(
                 e,

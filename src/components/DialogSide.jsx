@@ -1,12 +1,13 @@
-import { useState } from "react";
-
+import { useState,useEffect } from "react";
 function DialogSide(props) {
     let [selectionProhibited, setSelectionProhibited] = useState(false);
     let [currentDialog, setCurrentDialog] = useState('Dialog will be visible here!');
     let [currentOptions, setCurrentOptions] = useState([])
-    props.onProhibitSelectionStateChanged.Subscribe(() => { setSelectionProhibited(!selectionProhibited) })
-    props.onOptionsChanged.Subscribe((newOptions) => { setCurrentOptions(newOptions) })
-    props.onDialogChanged.Subscribe((dialog) => { setCurrentDialog(dialog) })
+    useEffect(() => {
+        props.onProhibitSelectionStateChanged.Subscribe(() => { setSelectionProhibited(!selectionProhibited) })
+        props.onOptionsChanged.Subscribe((newOptions) => { setCurrentOptions(newOptions) })
+        props.onDialogChanged.Subscribe((dialog) => { setCurrentDialog(dialog) })
+    }, [])
     return <div className={selectionProhibited ? 'dialogSide prohibitSelection' : 'dialogSide'}>
         <div className={'actualDialog'}>
             {currentDialog}

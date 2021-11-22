@@ -45,5 +45,3 @@ function makeVariableOfDynamicType(varName, variableDictionary){
     }
     return new DialogVariable(varName,variableDictionary)
 }
-
-//export default DialogVariable

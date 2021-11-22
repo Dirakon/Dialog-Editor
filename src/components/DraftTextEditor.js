@@ -6,10 +6,14 @@ import './../styles/RichText.css'
 class DraftTextEditor extends React.Component {
     constructor(props) {
         super(props);
-        if (props.parent !== undefined){
-            props.parent.setChild(this);
-        }
         this.state = { editorState: EditorState.createWithText(props.defaultDialog) };
+
+        props.setEditorState(this.state.editorState)
+
+        props.onProhibitSelectionStateChanged.Subscribe(() => { document.querySelector(".public-DraftEditor-content").classList.toggle("prohibitSelection") })
+        props.onDividerMoved.Subscribe((px) => {
+            document.querySelector(".RichEditor-editor").style.width = ((px).toString() + 'px')
+        })
 
         this.focus = () => this.refs.editor.focus();
         this.onChange = (editorState) => this.setState({ editorState });
@@ -31,6 +35,7 @@ class DraftTextEditor extends React.Component {
     }
 
     _mapKeyToEditorCommand(e) {
+        console.log(e.keyCode)
         if (e.keyCode === 9 /* TAB */) {
             const newEditorState = RichUtils.onTab(
                 e,

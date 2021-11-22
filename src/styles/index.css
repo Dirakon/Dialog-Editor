@@ -21,7 +21,7 @@ code {
 .compileButton{
     width: 100vw;
 }
-.flexer{
+.horizontalDialogLayout{
   height: 90%;
   display: flex;
   flex-flow: row nowrap;

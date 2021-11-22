@@ -1,6 +1,6 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import DraftTextEditor from './components/DraftTextEditor'
-import MyEditor from './components/MyEditor';
+import MyEditor from './components/MyEditor.jsx';
 
 
 function App() {
@@ -8,21 +8,8 @@ function App() {
         document.title = "Dialog Editor"
     }, []);
     return (
-        <div className="App" style={{height : '100%'}}>
-            <div style ={{height:'100%'}}>
-                <div className={'flexer'}>
-                    <MyEditor defaultDialog = {sampleDialog}/>
-                    <div className={'dividerBar'}>
-                    </div>
-                    <div className={ 'dialogSide'}>
-                        <div className={'actualDialog'}>
-                        Dialog will be visible here!
-                        </div>
-                    </div>
-                </div>
-
-                <button className={'compileButton'}> Compile!</button>
-            </div>
+        <div className="App" style={{ height: '100%' }}>
+            <MyEditor defaultDialog={sampleDialog} />
         </div>
 
 
@@ -75,7 +62,7 @@ const sampleDialog = `
 \t\t\t:load.0
 \t\t)
 \t)
-\t:save.1.0
+\t:save.3.0
 \t\\"..."/
 \t(
 \t\t:"Who do you want to play? I see real talent in you."
@@ -145,7 +132,7 @@ const sampleDialog = `
 \t\t\t\t\t\t(
 \t\t\t\t\t\t\t:load.0
 \t\t\t\t\t\t)
-\t\t\t\t\t\t:save.1.0
+\t\t\t\t\t\t:save.3.0
 \t\t\t\t\t\t\\"Speak!!!"/
 \t\t\t\t\t\t(
 \t\t\t\t\t\t\t:"Yes... A simple man."

@@ -36,31 +36,43 @@ class DialogEngine {
         this.text = "";
         this.options = [];
         let context = new ContextInfo(line + 1, this.vars, this.tags, this.saves)
-        let programStatus = GO_TO_NEXT_LINE
+        this.programStatus = GO_TO_NEXT_LINE
         while (context.indentationLevel !== 0) {
-            let { newOptions, newText, programStatus: newProgramStatus, programStatusDescriptor } = interpretOneLine(this.code[context.currentLine], context, programStatus)
-            programStatus = newProgramStatus
-            if (newText !== undefined)
-                this.text = newText
-            this.options = [...this.options, ...newOptions]
-            if (programStatus == PROGRAM_HALTED) {
+            let { newOptions, newText, programStatus: newProgramStatus, programStatusDescriptor } = interpretOneLine(this.code[context.currentLine], context, this.programStatus)
+            this.applyNewInformation(newProgramStatus, newText, newOptions);
+            if (this.programStatus == PROGRAM_HALTED) {
                 break;
-            } else if (programStatus == UP_X_LEVELS) {
-                context.currentLine = locateLineXLevelsUp(this.code, programStatusDescriptor, context)
-                programStatus = GO_TO_NEXT_LINE
-                if (context.currentLine == SYMBOL_NOT_FOUND_FLAG) {
-                    throw ("Cannot locate line with specified amount of levels of indentation up")
-                }
-            } else if (programStatus == SEEK_FOR_NEXT_ELSE) {
-                let lineWithElse = locateLineWithNextElse(this.code, context)
-                programStatus = GO_TO_NEXT_LINE
-                if (lineWithElse == SYMBOL_NOT_FOUND_FLAG)
-                    context.currentLine = getNextLineFromProgramStatus(programStatus, undefined, context.currentLine)
-                else
-                    context.currentLine = lineWithElse
+            } else if (this.programStatus == UP_X_LEVELS) {
+                this.goXLevelsUp(context, programStatusDescriptor);
+            } else if (this.programStatus == SEEK_FOR_NEXT_ELSE) {
+                this.goToNextElseOtherwiseNextLine(context);
             } else {
-                context.currentLine = getNextLineFromProgramStatus(programStatus, programStatusDescriptor, context.currentLine)
+                context.currentLine = getNextLineFromProgramStatus(this.programStatus, programStatusDescriptor, context.currentLine)
             }
+        }
+    }
+
+    applyNewInformation(newProgramStatus, newText, newOptions) {
+        this.programStatus = newProgramStatus;
+        if (newText !== undefined)
+            this.text = newText;
+        this.options = [...this.options, ...newOptions];
+    }
+
+    goToNextElseOtherwiseNextLine(context) {
+        let lineWithElse = locateLineWithNextElse(this.code, context);
+        this.programStatus = GO_TO_NEXT_LINE;
+        if (lineWithElse == SYMBOL_NOT_FOUND_FLAG)
+            context.currentLine = getNextLineFromProgramStatus(this.programStatus, undefined, context.currentLine);
+        else
+            context.currentLine = lineWithElse;
+    }
+
+    goXLevelsUp(context, programStatusDescriptor) {
+        context.currentLine = locateLineXLevelsUp(this.code, programStatusDescriptor, context);
+        this.programStatus = GO_TO_NEXT_LINE;
+        if (context.currentLine == SYMBOL_NOT_FOUND_FLAG) {
+            throw ("Cannot locate line with specified amount of levels of indentation up");
         }
     }
 

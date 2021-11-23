@@ -7,9 +7,6 @@ class SubscribableEvent{
     }
     Subscribe(obj){
         this.subscribers.add(obj)
-        console.log("current subscribers:")
-        console.log(this.subscribers)
-        console.log("-------------------")
     }
 }
 

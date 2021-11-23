@@ -1,8 +1,8 @@
 import DraftTextEditor from "./DraftTextEditor";
 import React, { useEffect } from "react";
 import EditorState from "draft-js/lib/EditorState";
-import DialogEngine from "./DialogEngine";
-import SubscribableEvent from "./SubcribableEvent";
+import DialogEngine from "../scripts/DialogEngine";
+import SubscribableEvent from "../scripts/SubcribableEvent";
 import DividerBar from "./DividerBar";
 import DialogSide from "./DialogSide";
 

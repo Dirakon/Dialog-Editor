@@ -1,4 +1,4 @@
-import { characterCountInString, replaceAllInString } from "./DialogUtils"
+import { characterCountInString, replaceAllInString } from "../scripts/DialogUtils"
 
 class IndentationMaster {
     constructor(context) {
